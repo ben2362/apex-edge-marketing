@@ -141,7 +141,7 @@
       </div>
       <div>
         <h6>Prefer to call?</h6>
-        <a href="tel:+18005551234">(800) 555-1234</a>
+        <a href="tel:+14244071029">+1 (424) 407-1029</a>
       </div>
       <div>
         <h6>Hours</h6>
@@ -150,96 +150,10 @@
     </div>
   </div>
 
-  <!-- RIGHT: booking widget -->
-  <div class="booker">
-    <div class="booker__steps s1" id="steps">
-      <div><div class="lbl">01 · Schedule</div><div class="bar"></div></div>
-      <div><div class="lbl">02 · Details</div><div class="bar"></div></div>
-      <div><div class="lbl">03 · Confirmed</div><div class="bar"></div></div>
-    </div>
-
-    <!-- SCREEN 1: schedule -->
-    <section class="screen is-active" id="screen1">
-      <div class="cal__head">
-        <div class="cal__title" id="calTitle">Month</div>
-        <div class="cal__nav">
-          <button id="calPrev" aria-label="Previous month">‹</button>
-          <button id="calNext" aria-label="Next month">›</button>
-        </div>
-      </div>
-      <div class="cal__dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
-      <div class="cal__grid" id="calGrid"></div>
-
-      <div class="slot-wrap" id="slotWrap" style="display:none;">
-        <div class="slot-head">
-          <div class="d">Times for <b id="slotDate">—</b></div>
-          <div class="placeholder-note">ET · 30 min</div>
-        </div>
-        <div class="slots" id="slots"></div>
-      </div>
-
-      <div class="booker__foot">
-        <button class="btn btn--primary btn--block" id="toDetails" disabled>Continue to details <span class="arrow">→</span></button>
-      </div>
-    </section>
-
-    <!-- SCREEN 2: details -->
-    <section class="screen" id="screen2">
-      <div class="selsum"><span class="dot"></span><span id="sumSchedule">—</span></div>
-      <form id="bookForm" novalidate>
-        <div class="two-col">
-          <div class="field"><label for="fname">Your name</label><input id="fname" name="fname" type="text" placeholder="Jordan Reyes" required /><div class="err">Please enter your name.</div></div>
-          <div class="field"><label for="fbiz">Business name</label><input id="fbiz" name="fbiz" type="text" placeholder="Reyes Kitchen & Bath" required /><div class="err">Please enter your business.</div></div>
-        </div>
-        <div class="field"><label for="femail">Email</label><input id="femail" name="femail" type="email" placeholder="you@yourcompany.com" required /><div class="err">Enter a valid email address.</div></div>
-        <div class="two-col">
-          <div class="field"><label for="fvert">Your trade</label>
-            <select id="fvert" name="fvert" required>
-              <option value="">Select…</option>
-              <option>Kitchen &amp; Bath</option>
-              <option>Roofing</option>
-              <option>Windows &amp; Doors</option>
-              <option>Decks &amp; Outdoor</option>
-              <option>Siding</option>
-              <option>Full-Home Remodels</option>
-              <option>Other home services</option>
-            </select><div class="err">Please choose one.</div>
-          </div>
-          <div class="field"><label for="fbudget">Monthly ad budget</label>
-            <select id="fbudget" name="fbudget" required>
-              <option value="">Select…</option>
-              <option>Under $3k / mo</option>
-              <option>$3k – $7k / mo</option>
-              <option>$7k – $15k / mo</option>
-              <option>$15k+ / mo</option>
-              <option>Not sure yet</option>
-            </select><div class="err">Please choose one.</div>
-          </div>
-        </div>
-        <div class="booker__foot">
-          <button type="button" class="btn btn--text" id="backToCal">← Back</button>
-          <button type="submit" class="btn btn--primary" id="confirmBtn">Confirm booking <span class="arrow">→</span></button>
-        </div>
-      </form>
-    </section>
-
-    <!-- SCREEN 3: confirmed -->
-    <section class="screen" id="screen3">
-      <div class="confirm">
-        <div class="confirm__check">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5 L10 18 L20 6" stroke="var(--acc)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>You're booked.</h3>
-        <p>We've held your slot. A confirmation and calendar invite are on the way to <b id="confEmail">your inbox</b>.</p>
-        <div class="confirm__card">
-          <div class="confirm__row"><span>When</span><b id="confWhen">—</b></div>
-          <div class="confirm__row"><span>With</span><b>Apex Edge · Strategy team</b></div>
-          <div class="confirm__row"><span>Business</span><b id="confBiz">—</b></div>
-          <div class="confirm__row"><span>Focus</span><b id="confVert">—</b></div>
-        </div>
-        <button class="btn btn--ghost btn--block" id="resetBtn">Book another time</button>
-      </div>
-    </section>
+  <!-- RIGHT: Calendly booking -->
+  <div class="booker" style="padding:0;overflow:hidden;min-height:700px;">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/bencooper1414/30min" style="min-width:320px;height:700px;border-radius:20px;overflow:hidden;"></div>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
   </div>
 </main>
 
