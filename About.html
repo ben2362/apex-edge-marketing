@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Apex Edge Marketing</title>
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+  .page-hero { padding: clamp(64px, 9vh, 120px) 0 56px; }
+  .page-hero .display { max-width: 20ch; font-size: clamp(44px, 6.4vw, 92px); }
+
+  .about-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; padding-bottom: 20px; }
+  .about-intro p { font-size: clamp(18px, 1.7vw, 22px); line-height: 1.55; color: var(--fg); text-wrap: pretty; }
+  .about-intro p + p { margin-top: 22px; color: var(--fg-mut); font-size: 17px; }
+  .about-intro .lead-serif { font-family: var(--serif); font-size: clamp(24px,2.6vw,34px); line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; }
+  .about-intro .lead-serif em { font-style: italic; color: var(--acc); }
+
+  .founder { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+  .founder image-slot { width: 100%; height: 460px; }
+  .founder__card { }
+  .founder__quote { font-family: var(--serif); font-size: clamp(24px,2.8vw,38px); line-height: 1.28; letter-spacing: -0.01em; text-wrap: balance; }
+  .founder__quote em { font-style: italic; color: var(--acc); }
+  .founder__by { margin-top: 28px; font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; color: var(--fg-mut); }
+
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line-2); }
+  .principle { padding: 40px 32px 44px 0; border-right: 1px solid var(--line); position: relative; }
+  .principle:last-child { border-right: 0; padding-right: 0; }
+  .principle::after { content: ''; position: absolute; top: -1px; left: 0; width: 40px; height: 2px; background: var(--acc); }
+  .principle .n { font-family: var(--mono); font-size: 12px; color: var(--acc); letter-spacing: 0.1em; }
+  .principle h4 { font-size: 25px; margin: 18px 0 12px; line-height: 1.08; }
+  .principle p { font-size: 14.5px; color: var(--fg-mut); margin: 0; }
+
+  .factstrip { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .factstrip > div { padding: 36px 30px 36px 0; border-right: 1px solid var(--line); }
+  .factstrip > div:last-child { border-right: 0; }
+  .factstrip .stat__label { max-width: 22ch; }
+
+  .ctaband { border: 1px solid var(--acc-line); border-radius: 22px; background: linear-gradient(160deg, var(--acc-soft), transparent 70%); padding: 72px clamp(28px, 6vw, 88px); text-align: center; }
+  .ctaband h2 { font-size: clamp(38px, 5.2vw, 72px); }
+  .ctaband em { font-style: italic; color: var(--acc); }
+
+  @media (max-width: 900px) {
+    .about-intro, .founder { grid-template-columns: 1fr; gap: 32px; }
+    .founder image-slot { height: 320px; }
+    .principles { grid-template-columns: 1fr; }
+    .principle { border-right: 0; padding-right: 0; border-bottom: 1px solid var(--line); }
+    .factstrip { grid-template-columns: 1fr 1fr; }
+    .factstrip > div:nth-child(2) { border-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="Home.html" aria-label="Apex Edge Marketing home">
+      <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+      <span>Apex<b class="brand__edge">Edge</b></span>
+    </a>
+    <div class="nav__links">
+      <a class="nav__link" href="Home.html">Home</a>
+      <a class="nav__link" href="Services.html">Services</a>
+      <a class="nav__link active" href="About.html">About</a>
+      <a class="nav__link" href="Contact.html">Contact</a>
+    </div>
+    <div class="nav__right">
+      <a class="btn btn--primary" href="Contact.html">Book a call <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="wrap">
+    <div style="margin-bottom:30px;"><span class="kicker">About Apex Edge</span></div>
+    <h1 class="display">We're not a <em>full-service</em> agency. Good.</h1>
+  </div>
+</header>
+
+<section class="section--tight">
+  <div class="wrap about-intro reveal">
+    <p class="lead-serif">Apex Edge exists for one reason: to put qualified homeowners on the calendars of <em>remodeling companies</em> that do great work but don't have time to chase ads.</p>
+    <div>
+      <p>Most agencies spread themselves across every industry and every channel, then report on whatever number happens to look good that month. We went the other way — one channel, one industry, one metric.</p>
+      <p>We run Facebook and Instagram ads for home remodelers across the US. That focus means we already know your buyer, your seasonality, and the offers that move them. You don't pay us to learn your business on your dime.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap founder reveal">
+    <image-slot id="about-founder" placeholder="Drop a founder / team photo" shape="rounded" radius="16"></image-slot>
+    <div class="founder__card">
+      <div style="margin-bottom:26px;"><span class="kicker kicker--plain">From the founder</span></div>
+      <p class="founder__quote">“I started Apex Edge because I watched good remodelers get sold <em>reach</em> and <em>impressions</em> while their phones stayed quiet. We only win when your crews are booked.”</p>
+      <div class="founder__by">FOUNDER NAME · Founder &amp; Lead Strategist — placeholder</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="reveal" style="max-width:52ch;margin-bottom:46px;">
+      <div style="margin-bottom:26px;"><span class="kicker">How we operate</span></div>
+      <h2 class="title">Three principles we don't bend on.</h2>
+    </div>
+    <div class="principles">
+      <div class="principle reveal">
+        <span class="n">01</span>
+        <h4>Booked jobs or it didn't happen</h4>
+        <p>We report on consults and closed work — not reach, not engagement, not "brand awareness." If it doesn't put a homeowner on your calendar, we're not interested in it.</p>
+      </div>
+      <div class="principle reveal d1">
+        <span class="n">02</span>
+        <h4>Specialists, not generalists</h4>
+        <p>We only take remodeling clients. That focus compounds — every campaign we run makes the next one sharper for your trade.</p>
+      </div>
+      <div class="principle reveal d2">
+        <span class="n">03</span>
+        <h4>Straight talk, always</h4>
+        <p>Plain-English reporting, honest forecasts, and no jargon. If something isn't working, you'll hear it from us first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:34px;">
+      <h2 class="title" style="max-width:18ch;">Focused by design.</h2>
+      <span class="tag-illustrative">Illustrative — replace with your real figures</span>
+    </div>
+    <div class="factstrip reveal">
+      <div><div class="stat__fig">1<span class="unit"> industry</span></div><div class="stat__label">Home remodeling. That's it.</div></div>
+      <div><div class="stat__fig">2<span class="unit"> channels</span></div><div class="stat__label">Facebook &amp; Instagram, done deeply.</div></div>
+      <div><div class="stat__fig">7<span class="unit">+ yrs</span></div><div class="stat__label">Running paid social for the trades.</div></div>
+      <div><div class="stat__fig">100<span class="unit">%</span></div><div class="stat__label">Reporting tied to booked jobs.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="ctaband reveal">
+      <div style="margin-bottom:24px;display:flex;justify-content:center;"><span class="kicker">Work with us</span></div>
+      <h2 class="title">Let's see if we're a <em>fit.</em></h2>
+      <p class="lead" style="margin:22px auto 0;text-align:center;">We take on a limited number of remodelers per market. Book a call and let's find out if yours is open.</p>
+      <div style="display:flex;justify-content:center;margin-top:36px;">
+        <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="Home.html" style="margin-bottom:20px;">
+          <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+          <span>Apex<b class="brand__edge">Edge</b></span>
+        </a>
+        <p class="footer__cta">Booked remodels, <em>not impressions.</em></p>
+      </div>
+      <div class="footer__col"><h5>Pages</h5><a href="Home.html">Home</a><a href="Services.html">Services</a><a href="About.html">About</a><a href="Contact.html">Contact</a></div>
+      <div class="footer__col"><h5>Verticals</h5><a href="Services.html">Kitchen &amp; Bath</a><a href="Services.html">Roofing</a><a href="Services.html">Windows &amp; Doors</a><a href="Services.html">Decks &amp; Outdoor</a></div>
+      <div class="footer__col"><h5>Get in touch</h5><a href="Contact.html">Book a call</a><a href="mailto:ben@apexedgeinfo.com">ben@apexedgeinfo.com</a></div>
+    </div>
+    <div class="footer__base">
+      <span class="mono">© <span data-year>2026</span> Apex Edge Marketing</span>
+      <span class="mono">Performance paid social · United States</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script src="image-slot.js"></script>
+</body>
+</html>

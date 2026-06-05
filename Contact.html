@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Book a call with Apex Edge</title>
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+  .contact-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 64px; align-items: start; padding-top: clamp(40px, 6vh, 80px); }
+  .contact-left .display { font-size: clamp(40px, 5.4vw, 74px); max-width: 14ch; }
+  .contact-left .lead { margin-top: 26px; }
+
+  .expect { list-style: none; margin: 40px 0 0; padding: 0; }
+  .expect li { display: flex; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .expect li:last-child { border-bottom: 1px solid var(--line); }
+  .expect .num { font-family: var(--mono); font-size: 12px; color: var(--acc); padding-top: 3px; letter-spacing: 0.08em; }
+  .expect b { font-weight: 600; font-size: 15.5px; display: block; }
+  .expect span.t { color: var(--fg-mut); font-size: 14px; }
+
+  .contact-detail { margin-top: 38px; display: flex; gap: 40px; flex-wrap: wrap; }
+  .contact-detail h6 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-dim); margin: 0 0 8px; font-weight: 500; }
+  .contact-detail a, .contact-detail p { color: var(--fg); font-size: 15px; margin: 0; }
+
+  /* booking widget */
+  .booker { background: linear-gradient(180deg, var(--bg-2), var(--bg-1)); border: 1px solid var(--line-2); border-radius: 20px; padding: 30px; box-shadow: 0 50px 100px -50px rgba(0,0,0,0.8); }
+  .booker__steps { display: flex; gap: 8px; margin-bottom: 26px; }
+  .booker__steps div { flex: 1; }
+  .booker__steps .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 8px; transition: color .3s; }
+  .booker__steps .bar { height: 3px; border-radius: 3px; background: var(--bg-3); transition: background .3s; }
+  .booker__steps.s1 div:nth-child(1) .lbl, .booker__steps.s2 div:nth-child(-n+2) .lbl, .booker__steps.s3 .lbl { color: var(--acc); }
+  .booker__steps.s1 div:nth-child(1) .bar, .booker__steps.s2 div:nth-child(-n+2) .bar, .booker__steps.s3 .bar { background: var(--acc); }
+
+  .screen { display: none; }
+  .screen.is-active { display: block; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* calendar */
+  .cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .cal__title { font-family: var(--serif); font-size: 22px; white-space: nowrap; letter-spacing: -0.01em; }
+  .cal__nav { display: flex; gap: 8px; }
+  .cal__nav button { width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--line-2); background: transparent; color: var(--fg); cursor: pointer; font-size: 16px; transition: border-color .2s, background .2s; }
+  .cal__nav button:hover:not(:disabled) { border-color: var(--acc-line); background: var(--acc-soft); }
+  .cal__nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  .cal__dow { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; margin-bottom: 8px; }
+  .cal__dow span { text-align: center; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--fg-dim); }
+  .cal__grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+  .cal__day { aspect-ratio: 1; border-radius: 10px; border: 1px solid transparent; background: var(--bg-3); color: var(--fg); font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: background .15s, border-color .15s, color .15s, transform .1s; }
+  .cal__day:hover:not(:disabled) { border-color: var(--acc-line); transform: translateY(-1px); }
+  .cal__day:disabled { background: transparent; color: var(--fg-dim); opacity: 0.4; cursor: default; }
+  .cal__day.empty { background: transparent; cursor: default; }
+  .cal__day.sel { background: var(--acc); color: var(--acc-ink); font-weight: 700; }
+
+  .slot-wrap { margin-top: 26px; }
+  .slot-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .slot-head .d { font-size: 14px; color: var(--fg-mut); }
+  .slot-head .d b { color: var(--fg); font-weight: 600; }
+  .slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .slot { padding: 13px 8px; border-radius: 10px; border: 1px solid var(--line-2); background: transparent; color: var(--fg); font-family: var(--mono); font-size: 13px; cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
+  .slot:hover { border-color: var(--acc-line); background: var(--acc-soft); }
+  .slot.sel { background: var(--acc); color: var(--acc-ink); border-color: var(--acc); font-weight: 600; }
+  .slot-empty { color: var(--fg-dim); font-size: 13.5px; padding: 8px 0; }
+
+  /* form */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-mut); margin-bottom: 8px; }
+  .field input, .field select { width: 100%; padding: 13px 15px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; transition: border-color .2s; }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--acc-line); }
+  .field input::placeholder { color: var(--fg-dim); }
+  .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa29a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; }
+  .field.invalid input, .field.invalid select { border-color: #ff6b5b; }
+  .field .err { color: #ff8a7d; font-size: 12px; margin-top: 6px; display: none; }
+  .field.invalid .err { display: block; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .booker__foot { display: flex; gap: 12px; margin-top: 24px; }
+  .booker__foot .btn { flex: 1; justify-content: center; }
+  .btn--block { width: 100%; justify-content: center; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn--text { background: transparent; border: none; color: var(--fg-mut); padding: 14px 8px; flex: 0 0 auto !important; }
+  .btn--text:hover { color: var(--fg); }
+
+  .selsum { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--acc-line); background: var(--acc-soft); margin-bottom: 22px; font-size: 14px; }
+  .selsum .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); flex: none; }
+  .selsum b { font-weight: 600; }
+
+  /* confirmation */
+  .confirm { text-align: center; padding: 14px 0; }
+  .confirm__check { width: 66px; height: 66px; border-radius: 50%; background: var(--acc-soft); border: 1px solid var(--acc-line); display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; }
+  .confirm__check svg { width: 30px; height: 30px; }
+  .confirm h3 { font-size: 30px; margin-bottom: 10px; }
+  .confirm p { color: var(--fg-mut); font-size: 15px; margin: 0 auto; max-width: 36ch; }
+  .confirm__card { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 26px 0; }
+  .confirm__row { display: flex; justify-content: space-between; padding: 9px 0; font-size: 14px; border-bottom: 1px solid var(--line); }
+  .confirm__row:last-child { border-bottom: 0; }
+  .confirm__row span { color: var(--fg-mut); }
+  .confirm__row b { font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="Home.html" aria-label="Apex Edge Marketing home">
+      <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+      <span>Apex<b class="brand__edge">Edge</b></span>
+    </a>
+    <div class="nav__links">
+      <a class="nav__link" href="Home.html">Home</a>
+      <a class="nav__link" href="Services.html">Services</a>
+      <a class="nav__link" href="About.html">About</a>
+      <a class="nav__link active" href="Contact.html">Contact</a>
+    </div>
+    <div class="nav__right">
+      <a class="btn btn--primary" href="#book">Book a call <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap contact-grid" id="book">
+  <!-- LEFT -->
+  <div class="contact-left">
+    <div style="margin-bottom:28px;"><span class="kicker">Book a strategy call</span></div>
+    <h1 class="display">Let's fill your <em>calendar.</em></h1>
+    <p class="lead">Pick a time that works. We'll spend 30 minutes on your market, your numbers, and exactly what your remodeling ads should be doing — no pitch deck, no pressure.</p>
+
+    <ul class="expect">
+      <li><span class="num">01</span><span><b>A free ad &amp; funnel audit</b><span class="t">We'll review what you're running now and where it's leaking.</span></span></li>
+      <li><span class="num">02</span><span><b>A real number to aim for</b><span class="t">A realistic cost-per-booked-job target for your trade and market.</span></span></li>
+      <li><span class="num">03</span><span><b>A clear next step</b><span class="t">Whether that's working together or not — you'll leave with a plan.</span></span></li>
+    </ul>
+
+    <div class="contact-detail">
+      <div>
+        <h6>Email</h6>
+        <a href="mailto:ben@apexedgeinfo.com">ben@apexedgeinfo.com</a>
+      </div>
+      <div>
+        <h6>Prefer to call?</h6>
+        <a href="tel:+18005551234">(800) 555-1234</a>
+      </div>
+      <div>
+        <h6>Hours</h6>
+        <p>Mon–Fri · 9–5 ET</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: booking widget -->
+  <div class="booker">
+    <div class="booker__steps s1" id="steps">
+      <div><div class="lbl">01 · Schedule</div><div class="bar"></div></div>
+      <div><div class="lbl">02 · Details</div><div class="bar"></div></div>
+      <div><div class="lbl">03 · Confirmed</div><div class="bar"></div></div>
+    </div>
+
+    <!-- SCREEN 1: schedule -->
+    <section class="screen is-active" id="screen1">
+      <div class="cal__head">
+        <div class="cal__title" id="calTitle">Month</div>
+        <div class="cal__nav">
+          <button id="calPrev" aria-label="Previous month">‹</button>
+          <button id="calNext" aria-label="Next month">›</button>
+        </div>
+      </div>
+      <div class="cal__dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+      <div class="cal__grid" id="calGrid"></div>
+
+      <div class="slot-wrap" id="slotWrap" style="display:none;">
+        <div class="slot-head">
+          <div class="d">Times for <b id="slotDate">—</b></div>
+          <div class="placeholder-note">ET · 30 min</div>
+        </div>
+        <div class="slots" id="slots"></div>
+      </div>
+
+      <div class="booker__foot">
+        <button class="btn btn--primary btn--block" id="toDetails" disabled>Continue to details <span class="arrow">→</span></button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: details -->
+    <section class="screen" id="screen2">
+      <div class="selsum"><span class="dot"></span><span id="sumSchedule">—</span></div>
+      <form id="bookForm" novalidate>
+        <div class="two-col">
+          <div class="field"><label for="fname">Your name</label><input id="fname" name="fname" type="text" placeholder="Jordan Reyes" required /><div class="err">Please enter your name.</div></div>
+          <div class="field"><label for="fbiz">Business name</label><input id="fbiz" name="fbiz" type="text" placeholder="Reyes Kitchen & Bath" required /><div class="err">Please enter your business.</div></div>
+        </div>
+        <div class="field"><label for="femail">Email</label><input id="femail" name="femail" type="email" placeholder="you@yourcompany.com" required /><div class="err">Enter a valid email address.</div></div>
+        <div class="two-col">
+          <div class="field"><label for="fvert">Your trade</label>
+            <select id="fvert" name="fvert" required>
+              <option value="">Select…</option>
+              <option>Kitchen &amp; Bath</option>
+              <option>Roofing</option>
+              <option>Windows &amp; Doors</option>
+              <option>Decks &amp; Outdoor</option>
+              <option>Siding</option>
+              <option>Full-Home Remodels</option>
+              <option>Other home services</option>
+            </select><div class="err">Please choose one.</div>
+          </div>
+          <div class="field"><label for="fbudget">Monthly ad budget</label>
+            <select id="fbudget" name="fbudget" required>
+              <option value="">Select…</option>
+              <option>Under $3k / mo</option>
+              <option>$3k – $7k / mo</option>
+              <option>$7k – $15k / mo</option>
+              <option>$15k+ / mo</option>
+              <option>Not sure yet</option>
+            </select><div class="err">Please choose one.</div>
+          </div>
+        </div>
+        <div class="booker__foot">
+          <button type="button" class="btn btn--text" id="backToCal">← Back</button>
+          <button type="submit" class="btn btn--primary" id="confirmBtn">Confirm booking <span class="arrow">→</span></button>
+        </div>
+      </form>
+    </section>
+
+    <!-- SCREEN 3: confirmed -->
+    <section class="screen" id="screen3">
+      <div class="confirm">
+        <div class="confirm__check">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5 L10 18 L20 6" stroke="var(--acc)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>You're booked.</h3>
+        <p>We've held your slot. A confirmation and calendar invite are on the way to <b id="confEmail">your inbox</b>.</p>
+        <div class="confirm__card">
+          <div class="confirm__row"><span>When</span><b id="confWhen">—</b></div>
+          <div class="confirm__row"><span>With</span><b>Apex Edge · Strategy team</b></div>
+          <div class="confirm__row"><span>Business</span><b id="confBiz">—</b></div>
+          <div class="confirm__row"><span>Focus</span><b id="confVert">—</b></div>
+        </div>
+        <button class="btn btn--ghost btn--block" id="resetBtn">Book another time</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer" style="margin-top:96px;">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="Home.html" style="margin-bottom:20px;">
+          <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+          <span>Apex<b class="brand__edge">Edge</b></span>
+        </a>
+        <p class="footer__cta">Booked remodels, <em>not impressions.</em></p>
+      </div>
+      <div class="footer__col"><h5>Pages</h5><a href="Home.html">Home</a><a href="Services.html">Services</a><a href="About.html">About</a><a href="Contact.html">Contact</a></div>
+      <div class="footer__col"><h5>Verticals</h5><a href="Services.html">Kitchen &amp; Bath</a><a href="Services.html">Roofing</a><a href="Services.html">Windows &amp; Doors</a><a href="Services.html">Decks &amp; Outdoor</a></div>
+      <div class="footer__col"><h5>Get in touch</h5><a href="Contact.html">Book a call</a><a href="mailto:ben@apexedgeinfo.com">ben@apexedgeinfo.com</a></div>
+    </div>
+    <div class="footer__base">
+      <span class="mono">© <span data-year>2026</span> Apex Edge Marketing</span>
+      <span class="mono">Performance paid social · United States</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SLOTS = ['9:00 AM','10:30 AM','12:00 PM','1:30 PM','3:00 PM','4:30 PM'];
+  var today = new Date(); today.setHours(0,0,0,0);
+  var minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  var maxMonth = new Date(today.getFullYear(), today.getMonth() + 3, 1);
+  var view = new Date(minMonth);
+  var sel = { date: null, time: null };
+
+  var grid = document.getElementById('calGrid');
+  var title = document.getElementById('calTitle');
+  var prev = document.getElementById('calPrev');
+  var next = document.getElementById('calNext');
+  var slotWrap = document.getElementById('slotWrap');
+  var slotsEl = document.getElementById('slots');
+  var slotDate = document.getElementById('slotDate');
+  var toDetails = document.getElementById('toDetails');
+
+  function fmtDate(d) {
+    var dows = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    return dows[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate();
+  }
+
+  function renderCal() {
+    title.textContent = MONTHS[view.getMonth()] + ' ' + view.getFullYear();
+    prev.disabled = (view.getFullYear() === minMonth.getFullYear() && view.getMonth() === minMonth.getMonth());
+    next.disabled = (view.getFullYear() === maxMonth.getFullYear() && view.getMonth() === maxMonth.getMonth());
+    grid.innerHTML = '';
+    var first = new Date(view.getFullYear(), view.getMonth(), 1);
+    var startDow = (first.getDay() + 6) % 7; // Monday-first
+    var daysInMonth = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (var i = 0; i < startDow; i++) {
+      var e = document.createElement('div'); e.className = 'cal__day empty'; grid.appendChild(e);
+    }
+    for (var d = 1; d <= daysInMonth; d++) {
+      var date = new Date(view.getFullYear(), view.getMonth(), d);
+      var btn = document.createElement('button');
+      btn.className = 'cal__day'; btn.type = 'button'; btn.textContent = d;
+      var isWeekend = (date.getDay() === 0 || date.getDay() === 6);
+      var isPast = date < today;
+      if (isWeekend || isPast) { btn.disabled = true; }
+      if (sel.date && date.getTime() === sel.date.getTime()) { btn.classList.add('sel'); }
+      (function (dt) {
+        btn.addEventListener('click', function () { pickDate(dt); });
+      })(date);
+      grid.appendChild(btn);
+    }
+  }
+
+  function pickDate(date) {
+    sel.date = date; sel.time = null;
+    renderCal();
+    slotDate.textContent = fmtDate(date);
+    slotWrap.style.display = 'block';
+    slotsEl.innerHTML = '';
+    SLOTS.forEach(function (s) {
+      var b = document.createElement('button');
+      b.className = 'slot'; b.type = 'button'; b.textContent = s;
+      b.addEventListener('click', function () {
+        sel.time = s;
+        [].forEach.call(slotsEl.children, function (c) { c.classList.remove('sel'); });
+        b.classList.add('sel');
+        toDetails.disabled = false;
+      });
+      slotsEl.appendChild(b);
+    });
+    toDetails.disabled = true;
+  }
+
+  prev.addEventListener('click', function () { view.setMonth(view.getMonth() - 1); renderCal(); });
+  next.addEventListener('click', function () { view.setMonth(view.getMonth() + 1); renderCal(); });
+
+  // step navigation
+  var steps = document.getElementById('steps');
+  var screens = { 1: document.getElementById('screen1'), 2: document.getElementById('screen2'), 3: document.getElementById('screen3') };
+  function goStep(n) {
+    Object.keys(screens).forEach(function (k) { screens[k].classList.toggle('is-active', +k === n); });
+    steps.className = 'booker__steps s' + n;
+  }
+
+  function scheduleLabel() {
+    return fmtDate(sel.date) + ' · ' + sel.time + ' ET';
+  }
+
+  toDetails.addEventListener('click', function () {
+    if (!sel.date || !sel.time) return;
+    document.getElementById('sumSchedule').innerHTML = '<b>' + scheduleLabel() + '</b>';
+    goStep(2);
+  });
+  document.getElementById('backToCal').addEventListener('click', function () { goStep(1); });
+
+  // form validation
+  var form = document.getElementById('bookForm');
+  function validate() {
+    var ok = true;
+    var fields = form.querySelectorAll('input[required], select[required]');
+    [].forEach.call(fields, function (f) {
+      var bad = !f.value.trim();
+      if (f.type === 'email' && f.value.trim()) { bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value.trim()); }
+      f.closest('.field').classList.toggle('invalid', bad);
+      if (bad) ok = false;
+    });
+    return ok;
+  }
+  [].forEach.call(form.querySelectorAll('input, select'), function (f) {
+    f.addEventListener('input', function () { f.closest('.field').classList.remove('invalid'); });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validate()) return;
+    document.getElementById('confWhen').textContent = scheduleLabel();
+    document.getElementById('confEmail').textContent = document.getElementById('femail').value.trim();
+    document.getElementById('confBiz').textContent = document.getElementById('fbiz').value.trim();
+    document.getElementById('confVert').textContent = document.getElementById('fvert').value;
+    goStep(3);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function () {
+    sel = { date: null, time: null };
+    form.reset();
+    [].forEach.call(form.querySelectorAll('.field'), function (f) { f.classList.remove('invalid'); });
+    slotWrap.style.display = 'none';
+    toDetails.disabled = true;
+    view = new Date(minMonth);
+    renderCal();
+    goStep(1);
+  });
+
+  renderCal();
+})();
+</script>
+</body>
+</html>

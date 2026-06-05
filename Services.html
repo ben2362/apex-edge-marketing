@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Services — Apex Edge Marketing</title>
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+  .page-hero { padding: clamp(64px, 9vh, 120px) 0 64px; }
+  .page-hero .display { max-width: 18ch; font-size: clamp(44px, 6.4vw, 92px); }
+  .page-hero .lead { margin-top: 28px; }
+
+  /* service rows */
+  .srow { display: grid; grid-template-columns: 0.42fr 1.18fr 1fr; gap: 48px; padding: 56px 0; border-top: 1px solid var(--line); align-items: start; }
+  .srow:last-child { border-bottom: 1px solid var(--line); }
+  .srow__no { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; color: var(--acc); padding-top: 8px; }
+  .srow h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1.05; }
+  .srow__desc { color: var(--fg-mut); font-size: 16px; margin-top: 18px; max-width: 42ch; }
+  .srow__list { list-style: none; margin: 0; padding: 0; }
+  .srow__list li { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; gap: 14px; align-items: flex-start; font-size: 15px; color: var(--fg); }
+  .srow__list li:last-child { border-bottom: 0; }
+  .srow__list li::before { content: ''; width: 7px; height: 7px; margin-top: 7px; background: var(--acc); border-radius: 50%; flex: none; }
+  .srow__list small { display: block; color: var(--fg-mut); font-size: 13.5px; margin-top: 3px; }
+
+  /* deliverables */
+  .deliver { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .deliver .card { padding: 26px; }
+  .deliver .card .ico { font-family: var(--mono); font-size: 12px; color: var(--acc); letter-spacing: 0.1em; }
+  .deliver .card h4 { font-size: 20px; margin: 16px 0 10px; }
+  .deliver .card p { font-size: 14px; color: var(--fg-mut); margin: 0; }
+
+  /* engagement */
+  .engage { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .engage > div { padding: 40px 34px; border-right: 1px solid var(--line); }
+  .engage > div:last-child { border-right: 0; }
+  .engage__step { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); letter-spacing: 0.1em; }
+  .engage h4 { font-size: 24px; margin: 14px 0 12px; }
+  .engage p { font-size: 14.5px; color: var(--fg-mut); margin: 0; }
+
+  /* CTA band reuse */
+  .ctaband { border: 1px solid var(--acc-line); border-radius: 22px; background: linear-gradient(160deg, var(--acc-soft), transparent 70%); padding: 72px clamp(28px, 6vw, 88px); text-align: center; }
+  .ctaband h2 { font-size: clamp(38px, 5.2vw, 72px); }
+  .ctaband em { font-style: italic; color: var(--acc); }
+
+  @media (max-width: 900px) {
+    .srow { grid-template-columns: 1fr; gap: 22px; }
+    .deliver { grid-template-columns: 1fr 1fr; }
+    .engage { grid-template-columns: 1fr; }
+    .engage > div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .engage > div:last-child { border-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="Home.html" aria-label="Apex Edge Marketing home">
+      <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+      <span>Apex<b class="brand__edge">Edge</b></span>
+    </a>
+    <div class="nav__links">
+      <a class="nav__link" href="Home.html">Home</a>
+      <a class="nav__link active" href="Services.html">Services</a>
+      <a class="nav__link" href="About.html">About</a>
+      <a class="nav__link" href="Contact.html">Contact</a>
+    </div>
+    <div class="nav__right">
+      <a class="btn btn--primary" href="Contact.html">Book a call <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="wrap">
+    <div style="margin-bottom:30px;"><span class="kicker">What we do</span></div>
+    <h1 class="display">One service, run <em>relentlessly.</em></h1>
+    <p class="lead">We don't do everything. We do paid social for home remodelers — the offer, the creative, the media, and the booking — and we measure it in jobs, not impressions.</p>
+  </div>
+</header>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="srow">
+      <div class="srow__no">01</div>
+      <div>
+        <h3>Offer &amp; funnel strategy</h3>
+        <p class="srow__desc">Before a dollar is spent, we engineer an offer homeowners can't ignore and a funnel that filters tire-kickers out — so your sales team only talks to real buyers.</p>
+      </div>
+      <ul class="srow__list">
+        <li><span>Local market &amp; competitor teardown<small>Where demand is, what the other guys are doing.</small></span></li>
+        <li><span>Offer &amp; positioning build<small>The hook, the promise, the reason to act now.</small></span></li>
+        <li><span>Landing page &amp; lead-form funnel<small>Built to qualify, not just collect emails.</small></span></li>
+      </ul>
+    </div>
+
+    <div class="srow">
+      <div class="srow__no">02</div>
+      <div>
+        <h3>Creative production</h3>
+        <p class="srow__desc">Native-feeling Facebook &amp; Instagram creative built around your real projects — never stock footage, never recycled templates. Creative is the lever, so we test relentlessly.</p>
+      </div>
+      <ul class="srow__list">
+        <li><span>Project-based video &amp; photo direction<small>Shot lists your crew can capture on-site.</small></span></li>
+        <li><span>Ad scripts, hooks &amp; angles<small>Multiple angles per offer, tested weekly.</small></span></li>
+        <li><span>Static, carousel &amp; reel formats<small>Built for the feed, not for an awards reel.</small></span></li>
+      </ul>
+    </div>
+
+    <div class="srow">
+      <div class="srow__no">03</div>
+      <div>
+        <h3>Media buying &amp; optimization</h3>
+        <p class="srow__desc">Hands-on management inside Meta Ads — optimized daily toward cost-per-booked-job, not the numbers that look pretty in a dashboard.</p>
+      </div>
+      <ul class="srow__list">
+        <li><span>Campaign build &amp; audience strategy<small>Geo-targeted to your real service area.</small></span></li>
+        <li><span>Daily budget &amp; bid optimization<small>Scaling what works, cutting what doesn't.</small></span></li>
+        <li><span>Conversion tracking &amp; attribution<small>Tied back to booked consults and revenue.</small></span></li>
+      </ul>
+    </div>
+
+    <div class="srow">
+      <div class="srow__no">04</div>
+      <div>
+        <h3>Lead routing &amp; booking</h3>
+        <p class="srow__desc">A lead that sits for an hour is a lost job. We wire up instant routing and reporting so qualified homeowners land on your calendar while they're still interested.</p>
+      </div>
+      <ul class="srow__list">
+        <li><span>Instant lead notifications &amp; routing<small>To your CRM, inbox, or phone in seconds.</small></span></li>
+        <li><span>Speed-to-lead &amp; follow-up templates<small>So no opportunity goes cold.</small></span></li>
+        <li><span>Transparent weekly reporting<small>Leads, cost-per-lead, booked jobs. Plain English.</small></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="reveal" style="max-width:54ch;margin-bottom:44px;">
+      <div style="margin-bottom:26px;"><span class="kicker">What you get</span></div>
+      <h2 class="title">Everything pointed at one outcome.</h2>
+    </div>
+    <div class="deliver">
+      <div class="card reveal"><div class="ico">— REVIEW</div><h4>Free ad audit</h4><p>A teardown of your current ads and funnel before you commit to anything.</p></div>
+      <div class="card reveal d1"><div class="ico">— SPRINT</div><h4>30-day launch</h4><p>Offer, creative, and campaigns live inside the first month.</p></div>
+      <div class="card reveal d2"><div class="ico">— CADENCE</div><h4>Weekly reporting</h4><p>A clear read on leads, cost-per-lead, and booked jobs — every week.</p></div>
+      <div class="card reveal d3"><div class="ico">— ACCESS</div><h4>Direct line</h4><p>You talk to the people running your account, not an account manager.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="reveal" style="max-width:54ch;margin-bottom:38px;">
+      <div style="margin-bottom:26px;"><span class="kicker">How we work together</span></div>
+      <h2 class="title">A simple, <em>no-lock-in</em> engagement.</h2>
+    </div>
+    <div class="engage reveal">
+      <div>
+        <div class="engage__step">STEP 01</div>
+        <h4>Audit &amp; plan</h4>
+        <p>We review your market, numbers, and goals, then map exactly what your ads should be doing — before you pay us a cent.</p>
+      </div>
+      <div>
+        <div class="engage__step">STEP 02</div>
+        <h4>Launch in 30 days</h4>
+        <p>Offer, funnel, and creative built and live inside a month — with a clear target for cost-per-booked-job.</p>
+      </div>
+      <div>
+        <div class="engage__step">STEP 03</div>
+        <h4>Scale month to month</h4>
+        <p>A flat monthly retainer, reviewed every quarter. Scale up when it's working — no annual contracts.</p>
+      </div>
+    </div>
+    <p class="placeholder-note" style="margin-top:18px;">Engagement terms shown are a template — adjust to your real pricing &amp; contract model.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="ctaband reveal">
+      <div style="margin-bottom:24px;display:flex;justify-content:center;"><span class="kicker">Start with the audit</span></div>
+      <h2 class="title">See what your ads <em>should</em> be doing.</h2>
+      <p class="lead" style="margin:22px auto 0;text-align:center;">Book a 30-minute call and we'll tear down your current setup — free, no strings.</p>
+      <div style="display:flex;justify-content:center;margin-top:36px;">
+        <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="Home.html" style="margin-bottom:20px;">
+          <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/></svg></span>
+          <span>Apex<b class="brand__edge">Edge</b></span>
+        </a>
+        <p class="footer__cta">Booked remodels, <em>not impressions.</em></p>
+      </div>
+      <div class="footer__col"><h5>Pages</h5><a href="Home.html">Home</a><a href="Services.html">Services</a><a href="About.html">About</a><a href="Contact.html">Contact</a></div>
+      <div class="footer__col"><h5>Verticals</h5><a href="Services.html">Kitchen &amp; Bath</a><a href="Services.html">Roofing</a><a href="Services.html">Windows &amp; Doors</a><a href="Services.html">Decks &amp; Outdoor</a></div>
+      <div class="footer__col"><h5>Get in touch</h5><a href="Contact.html">Book a call</a><a href="mailto:ben@apexedgeinfo.com">ben@apexedgeinfo.com</a></div>
+    </div>
+    <div class="footer__base">
+      <span class="mono">© <span data-year>2026</span> Apex Edge Marketing</span>
+      <span class="mono">Performance paid social · United States</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

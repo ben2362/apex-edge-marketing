@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apex Edge Marketing — Booked remodels, not impressions</title>
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+  /* ============ HERO (3 switchable variations) ============ */
+  #hero { padding: clamp(48px, 8vh, 104px) 0 92px; }
+  .hero-var { display: none; }
+  #hero[data-hero="A"] .hero-A,
+  #hero[data-hero="B"] .hero-B,
+  #hero[data-hero="C"] .hero-C { display: block; }
+
+  .hero-eyebrow { margin-bottom: 30px; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 38px; }
+  .hero-lead { margin-top: 26px; }
+
+  /* stat strip shared */
+  .statstrip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 64px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .statstrip > div { padding: 30px 30px 30px 0; border-right: 1px solid var(--line); }
+  .statstrip > div:last-child { border-right: 0; padding-right: 0; }
+  .statline { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+
+  /* Variation A — left statement */
+  .hero-A .display { max-width: 17ch; }
+  .hero-A .hero-lead { max-width: 50ch; }
+
+  /* Variation B — split with metrics panel */
+  .hero-B .split { display: grid; grid-template-columns: 1.06fr 0.94fr; gap: 56px; align-items: center; }
+  .hero-B .display { font-size: clamp(42px, 5.4vw, 76px); max-width: 14ch; }
+  .panel {
+    background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border: 1px solid var(--line-2);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 40px 80px -40px rgba(0,0,0,0.7);
+  }
+  .panel__top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+  .panel__top .mono { font-family: var(--mono); font-size: 12px; color: var(--fg-mut); letter-spacing: 0.04em; }
+  .panel__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 12px var(--acc); display: inline-block; margin-right: 7px; }
+  .panel__hero-num { display: flex; align-items: baseline; gap: 14px; margin: 22px 0 8px; }
+  .panel__hero-num b { font-family: var(--serif); font-size: 62px; font-weight: 500; line-height: 0.9; letter-spacing: -0.02em; }
+  .panel__delta { font-family: var(--mono); font-size: 13px; color: var(--acc); }
+  .bars { display: flex; align-items: flex-end; gap: 9px; height: 92px; margin: 24px 0 8px; }
+  .bars i { flex: 1; background: var(--bg-3); border-radius: 3px 3px 0 0; display: block; }
+  .bars i.hi { background: var(--acc); }
+  .panel__rows { margin-top: 18px; border-top: 1px solid var(--line); }
+  .panel__row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .panel__row:last-child { border-bottom: 0; }
+  .panel__row span { color: var(--fg-mut); }
+  .panel__row b { font-family: var(--mono); font-weight: 500; }
+
+  /* Variation C — centered editorial */
+  .hero-C { text-align: center; }
+  .hero-C .hero-eyebrow { justify-content: center; }
+  .hero-C .kicker::before { display: none; }
+  .hero-C .display { font-size: clamp(50px, 8.6vw, 124px); margin: 0 auto; max-width: 16ch; }
+  .hero-C .hero-lead { margin-left: auto; margin-right: auto; }
+  .hero-C .hero-cta { justify-content: center; }
+  .hero-C .statstrip { max-width: 860px; margin-left: auto; margin-right: auto; }
+  .hero-C .statstrip > div { text-align: left; }
+
+  /* ============ verticals marquee ============ */
+  .marquee { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .marquee__track { display: flex; gap: 0; width: max-content; animation: scroll-x 34s linear infinite; }
+  .marquee__track span { font-family: var(--serif); font-size: 30px; font-style: italic; color: var(--fg-mut); padding: 0 34px; white-space: nowrap; display: inline-flex; align-items: center; gap: 34px; }
+  .marquee__track span::after { content: '◆'; font-style: normal; font-size: 9px; color: var(--acc); }
+  @keyframes scroll-x { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+
+  /* ============ positioning ============ */
+  .position-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 60px; align-items: end; }
+  .big-statement { font-family: var(--serif); font-size: clamp(30px, 3.4vw, 46px); font-weight: 400; line-height: 1.16; letter-spacing: -0.015em; text-wrap: balance; }
+  .big-statement em { font-style: italic; color: var(--acc); }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; }
+  .compare__col { padding: 24px; border-radius: 12px; }
+  .compare__col--old { border: 1px solid var(--line); }
+  .compare__col--new { border: 1px solid var(--acc-line); background: var(--acc-soft); }
+  .compare__col h6 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 16px; font-weight: 500; }
+  .compare__col--old h6 { color: var(--fg-dim); }
+  .compare__col--new h6 { color: var(--acc); }
+  .compare__col ul { list-style: none; margin: 0; padding: 0; }
+  .compare__col li { font-size: 14.5px; padding: 8px 0; color: var(--fg-mut); display: flex; gap: 10px; }
+  .compare__col--new li { color: var(--fg); }
+  .compare__col li::before { content: '—'; color: var(--fg-dim); }
+  .compare__col--new li::before { content: '→'; color: var(--acc); }
+
+  /* ============ communication ============ */
+  .comm-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center; }
+  .comm-points { display: grid; gap: 0; }
+  .comm-point { display: grid; grid-template-columns: auto 1fr; gap: 22px; padding: 24px 0; border-top: 1px solid var(--line); }
+  .comm-point:last-child { border-bottom: 1px solid var(--line); }
+  .comm-point .comm-no { font-family: var(--mono); font-size: 12px; color: var(--acc); letter-spacing: 0.1em; padding-top: 5px; }
+  .comm-point h4 { font-size: 22px; line-height: 1.05; }
+  .comm-point p { font-size: 14.5px; color: var(--fg-mut); margin: 8px 0 0; max-width: 44ch; }
+
+  /* ============ process ============ */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 56px; border-top: 1px solid var(--line-2); }
+  .step { padding: 34px 28px 38px 0; border-right: 1px solid var(--line); position: relative; }
+  .step:last-child { border-right: 0; padding-right: 0; }
+  .step__no { font-family: var(--mono); font-size: 12px; color: var(--acc); letter-spacing: 0.1em; }
+  .step h4 { font-size: 23px; margin: 20px 0 12px; line-height: 1.1; }
+  .step p { font-size: 14.5px; color: var(--fg-mut); margin: 0; }
+  .step::after { content: ''; position: absolute; top: -1px; left: 0; width: 40px; height: 2px; background: var(--acc); }
+
+  /* ============ results ============ */
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .quote-block { margin-top: 22px; }
+  .quote-block blockquote { font-family: var(--serif); font-size: clamp(24px, 2.8vw, 36px); font-weight: 400; line-height: 1.32; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  .quote-block blockquote em { font-style: italic; color: var(--acc); }
+  .quote-by { display: flex; align-items: center; gap: 14px; margin-top: 28px; }
+  .quote-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--bg-3); border: 1px solid var(--line-2); flex: none; }
+  .quote-by .n { font-weight: 600; font-size: 15px; }
+  .quote-by .r { color: var(--fg-dim); font-size: 13px; font-family: var(--mono); }
+
+  /* ============ verticals cards ============ */
+  .vcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .vcard { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--bg-1); transition: border-color .25s, transform .25s; }
+  .vcard:hover { border-color: var(--line-2); transform: translateY(-3px); }
+  .vcard image-slot { width: 100%; height: 200px; display: block; border-radius: 0; }
+  .vcard__body { padding: 22px 24px 26px; }
+  .vcard__body h4 { font-size: 22px; }
+  .vcard__body p { font-size: 14px; color: var(--fg-mut); margin: 8px 0 0; }
+
+  /* ============ CTA band ============ */
+  .ctaband { border: 1px solid var(--acc-line); border-radius: 22px; background: linear-gradient(160deg, var(--acc-soft), transparent 70%); padding: 72px clamp(28px, 6vw, 88px); text-align: center; }
+  .ctaband h2 { font-size: clamp(38px, 5.2vw, 72px); }
+  .ctaband em { font-style: italic; color: var(--acc); }
+
+  @media (max-width: 900px) {
+    .hero-B .split { grid-template-columns: 1fr; gap: 38px; }
+    .statstrip { grid-template-columns: 1fr; }
+    .statstrip > div { border-right: 0; border-bottom: 1px solid var(--line); padding: 22px 0; }
+    .statstrip > div:last-child { border-bottom: 0; }
+    .position-grid { grid-template-columns: 1fr; gap: 36px; }
+    .comm-grid { grid-template-columns: 1fr; gap: 32px; }
+    .compare { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .step { border-right: 0; padding-right: 0; }
+    .results-grid, .vcards { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================
+     PRINT STYLES — paginated, color-forced, animations frozen
+     ============================================================ */
+  @page { size: A4 portrait; margin: 1.2cm; }
+
+  @media print {
+    html, body { background: var(--bg) !important; }
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    /* freeze all animations/transitions at their END state */
+    *, *::before, *::after {
+      animation-delay: -99s !important;
+      animation-duration: .001s !important;
+      animation-iteration-count: 1 !important;
+      animation-fill-mode: both !important;
+      animation-play-state: running !important;
+      transition-duration: 0s !important;
+    }
+    /* reveal-on-scroll elements must be fully shown on paper */
+    .reveal { opacity: 1 !important; transform: none !important; }
+
+    /* nav: static at top, drop the sticky/blur, no CTA button needed */
+    .nav { position: static !important; backdrop-filter: none !important; background: transparent !important; border-bottom: 1px solid var(--line) !important; }
+    .nav__right { display: none !important; }
+    body::before { display: none !important; } /* drop the fixed glow overlay */
+
+    /* marquee: show static, no clipping mask, no scroll transform */
+    .marquee { -webkit-mask-image: none !important; mask-image: none !important; }
+    .marquee__track { animation: none !important; transform: none !important; width: 100% !important; flex-wrap: wrap; justify-content: center; }
+
+    /* tighten vertical rhythm for paper */
+    .section { padding: 40px 0 !important; }
+    .section--tight { padding: 32px 0 !important; }
+    #hero { padding: 12px 0 40px !important; }
+    .hero-C .display { font-size: 60px !important; }
+    .statstrip { margin-top: 40px !important; }
+
+    /* page breaks: each major block on its own page, kept whole */
+    .marquee,
+    section.section,
+    .footer { break-before: page; page-break-before: always; }
+    .card, .step, .vcard, .ctaband, .panel,
+    .compare__col, .quote-block, .statstrip > div,
+    .position-grid, .results-grid, .vcards, .steps {
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    /* avoid an empty trailing page */
+    .footer { padding-top: 40px !important; }
+
+    /* hide interactive-only chrome */
+    #tweaks-root, .tweaks-panel { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="Home.html" aria-label="Apex Edge Marketing home">
+      <span class="brand__mark">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/>
+        </svg>
+      </span>
+      <span>Apex<b class="brand__edge">Edge</b></span>
+    </a>
+    <div class="nav__links">
+      <a class="nav__link active" href="Home.html">Home</a>
+      <a class="nav__link" href="Services.html">Services</a>
+      <a class="nav__link" href="About.html">About</a>
+      <a class="nav__link" href="Contact.html">Contact</a>
+    </div>
+    <div class="nav__right">
+      <a class="btn btn--primary" href="Contact.html">Book a call <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header id="hero" data-hero="C">
+  <div class="wrap">
+
+    <!-- Variation A -->
+    <div class="hero-var hero-A">
+      <div class="hero-eyebrow"><span class="kicker">Facebook &amp; Instagram ads for remodelers</span></div>
+      <h1 class="display">Ad spend in.<br /><em>Booked remodels</em> out.</h1>
+      <p class="lead hero-lead">Apex Edge runs paid social for home-remodeling companies — kitchen &amp; bath, roofing, windows, decks. We build the offer, run the media, and fill your calendar with homeowners who are ready to remodel.</p>
+      <div class="hero-cta">
+        <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+        <a class="btn btn--ghost btn--lg" href="Services.html">See how it works</a>
+      </div>
+      <div class="statstrip"></div>
+    </div>
+
+    <!-- Variation B -->
+    <div class="hero-var hero-B">
+      <div class="split">
+        <div>
+          <div class="hero-eyebrow"><span class="kicker">Facebook &amp; Instagram ads for remodelers</span></div>
+          <h1 class="display">More booked jobs. <em>Less</em> guesswork.</h1>
+          <p class="lead hero-lead">We turn paid social into a predictable stream of qualified homeowners for remodeling companies — and report on the only number that matters: jobs on the calendar.</p>
+          <div class="hero-cta">
+            <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+            <a class="btn btn--ghost btn--lg" href="Services.html">See how it works</a>
+          </div>
+        </div>
+        <div class="panel" aria-hidden="true">
+          <div class="panel__top">
+            <span class="mono"><span class="panel__dot"></span>Live · Kitchen &amp; Bath</span>
+            <span class="mono">Last 30 days</span>
+          </div>
+          <div class="panel__hero-num">
+            <b>4.7×</b>
+            <span class="panel__delta">↑ return on ad spend</span>
+          </div>
+          <div class="bars">
+            <i style="height:38%"></i><i style="height:52%"></i><i style="height:44%"></i>
+            <i style="height:66%"></i><i style="height:58%"></i><i style="height:78%"></i>
+            <i class="hi" style="height:92%"></i><i class="hi" style="height:100%"></i>
+          </div>
+          <div class="panel__rows">
+            <div class="panel__row"><span>Qualified leads</span><b>128</b></div>
+            <div class="panel__row"><span>Cost per lead</span><b>$36</b></div>
+            <div class="panel__row"><span>Booked consults</span><b>41</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="statstrip"></div>
+    </div>
+
+    <!-- Variation C -->
+    <div class="hero-var hero-C">
+      <div class="hero-eyebrow"><span class="kicker">Facebook &amp; Instagram ads for remodelers</span></div>
+      <h1 class="display">We fill remodelers' calendars with <em>ready buyers.</em></h1>
+      <p class="lead hero-lead">Performance paid social for kitchen &amp; bath, roofing, windows and decks. No vanity metrics. No stock-photo ads. Just booked jobs.</p>
+      <div class="hero-cta">
+        <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+        <a class="btn btn--ghost btn--lg" href="Services.html">See how it works</a>
+      </div>
+      <div class="statstrip"></div>
+    </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- ============ VERTICALS MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Kitchen &amp; Bath</span><span>Roofing</span><span>Windows &amp; Doors</span><span>Decks &amp; Outdoor</span><span>Siding</span><span>Full-Home Remodels</span>
+    <span>Kitchen &amp; Bath</span><span>Roofing</span><span>Windows &amp; Doors</span><span>Decks &amp; Outdoor</span><span>Siding</span><span>Full-Home Remodels</span>
+  </div>
+</div>
+
+<!-- ============ POSITIONING ============ -->
+<section class="section">
+  <div class="wrap position-grid">
+    <div class="reveal">
+      <div style="margin-bottom:26px;"><span class="kicker kicker--plain">The difference</span></div>
+      <p class="big-statement">Most agencies sell remodelers <em>clicks.</em> We sell <em>booked jobs</em> — and we report on nothing else.</p>
+    </div>
+    <div class="compare reveal d1">
+      <div class="compare__col compare__col--old">
+        <h6>Typical agency</h6>
+        <ul>
+          <li>Reports impressions &amp; reach</li>
+          <li>Boosts posts, hopes for the best</li>
+          <li>Generic stock-photo creative</li>
+          <li>Leads dumped in a spreadsheet</li>
+        </ul>
+      </div>
+      <div class="compare__col compare__col--new">
+        <h6>Apex Edge</h6>
+        <ul>
+          <li>Reports booked consults &amp; jobs</li>
+          <li>Daily optimization to cost-per-job</li>
+          <li>Native, on-brand ad creative</li>
+          <li>Qualified leads on your calendar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="reveal" style="max-width:60ch;">
+      <div style="margin-bottom:26px;"><span class="kicker">How it works</span></div>
+      <h2 class="title">A system built to put homeowners <em>on your calendar.</em></h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step__no">01</span>
+        <h4>Offer engineering</h4>
+        <p>We package your remodel into an offer homeowners actually act on — clear, local, and impossible to scroll past.</p>
+      </div>
+      <div class="step reveal d1">
+        <span class="step__no">02</span>
+        <h4>Scroll-stopping creative</h4>
+        <p>Native-feeling Facebook &amp; Instagram ads shot around real projects. No stock footage, no recycled templates.</p>
+      </div>
+      <div class="step reveal d2">
+        <span class="step__no">03</span>
+        <h4>Media buying</h4>
+        <p>Daily optimization toward booked appointments and cost-per-job — not impressions, reach, or vanity metrics.</p>
+      </div>
+      <div class="step reveal d3">
+        <span class="step__no">04</span>
+        <h4>Booked calendar</h4>
+        <p>Qualified, pre-framed homeowners land straight on your calendar, ready for the estimate conversation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:42px;">
+      <div style="max-width:50ch;">
+        <div style="margin-bottom:26px;"><span class="kicker">The numbers</span></div>
+        <h2 class="title">Built around the metrics that pay the bills.</h2>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="card reveal">
+        <div class="stat__fig">$36<span class="unit">/lead</span></div>
+        <div class="stat__label">Average cost per qualified remodeling lead across active accounts.</div>
+      </div>
+      <div class="card reveal d1">
+        <div class="stat__fig">4.7<span class="unit">× ROAS</span></div>
+        <div class="stat__label">Return on ad spend, measured against closed job revenue.</div>
+      </div>
+      <div class="card reveal d2">
+        <div class="stat__fig">120<span class="unit">+ /mo</span></div>
+        <div class="stat__label">Qualified homeowner leads generated for a typical regional remodeler.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VERTICALS CARDS ============ -->
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="reveal" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px;">
+      <div style="max-width:48ch;">
+        <div style="margin-bottom:26px;"><span class="kicker">Who we run ads for</span></div>
+        <h2 class="title">Specialists in the <em>remodeling</em> trades.</h2>
+      </div>
+      <a class="btn btn--ghost" href="Services.html">All services <span class="arrow">→</span></a>
+    </div>
+    <div class="vcards">
+      <div class="vcard reveal">
+        <image-slot id="v-kitchen" placeholder="Drop a kitchen & bath project photo"></image-slot>
+        <div class="vcard__body"><h4>Kitchen &amp; Bath</h4><p>High-intent homeowners for full kitchen and bathroom remodels.</p></div>
+      </div>
+      <div class="vcard reveal d1">
+        <image-slot id="v-roofing" placeholder="Drop a roofing project photo"></image-slot>
+        <div class="vcard__body"><h4>Roofing</h4><p>Storm-season and replacement demand, filtered for serious buyers.</p></div>
+      </div>
+      <div class="vcard reveal d2">
+        <image-slot id="v-windows" placeholder="Drop a windows & doors photo"></image-slot>
+        <div class="vcard__body"><h4>Windows &amp; Doors</h4><p>Whole-home and high-ticket window replacement campaigns.</p></div>
+      </div>
+      <div class="vcard reveal">
+        <image-slot id="v-decks" placeholder="Drop a deck / outdoor photo"></image-slot>
+        <div class="vcard__body"><h4>Decks &amp; Outdoor</h4><p>Seasonal outdoor-living demand captured before competitors move.</p></div>
+      </div>
+      <div class="vcard reveal d1">
+        <image-slot id="v-siding" placeholder="Drop a siding project photo"></image-slot>
+        <div class="vcard__body"><h4>Siding</h4><p>Exterior transformation offers built for the local homeowner.</p></div>
+      </div>
+      <div class="vcard reveal d2">
+        <image-slot id="v-full" placeholder="Drop a full remodel photo"></image-slot>
+        <div class="vcard__body"><h4>Full-Home Remodels</h4><p>Premium, design-led remodels matched to qualified budgets.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMUNICATION ============ -->
+<section class="section section--tight">
+  <div class="wrap comm-grid">
+    <div class="reveal">
+      <div style="margin-bottom:26px;"><span class="kicker">A core value</span></div>
+      <p class="big-statement">You'll always know <em>where your money is going.</em></p>
+    </div>
+    <div class="comm-points reveal d1">
+      <div class="comm-point">
+        <span class="comm-no">01</span>
+        <div><h4>Weekly updates</h4><p>A clear read on spend, leads, and booked jobs lands in your inbox every week — no asking required.</p></div>
+      </div>
+      <div class="comm-point">
+        <span class="comm-no">02</span>
+        <div><h4>Clear reporting</h4><p>Plain-English numbers tied to real outcomes, not a dashboard full of metrics that don't pay the bills.</p></div>
+      </div>
+      <div class="comm-point">
+        <span class="comm-no">03</span>
+        <div><h4>No chasing us for answers</h4><p>You talk to the people running your account, and you hear from us first when something needs attention.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="ctaband reveal">
+      <div style="margin-bottom:24px;display:flex;justify-content:center;"><span class="kicker">Let's talk numbers</span></div>
+      <h2 class="title">Ready to book your crews <em>solid?</em></h2>
+      <p class="lead" style="margin:22px auto 0;text-align:center;">A 30-minute call. We'll map what your remodeling ads should be doing — and what it'll take to get there.</p>
+      <div style="display:flex;justify-content:center;margin-top:36px;">
+        <a class="btn btn--primary btn--lg" href="Contact.html">Book a strategy call <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="Home.html" style="margin-bottom:20px;">
+          <span class="brand__mark">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5 L21.5 21 L2.5 21 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M12 2.5 L16.7 11.6 L7.3 11.6 Z" fill="var(--acc)"/>
+            </svg>
+          </span>
+          <span>Apex<b class="brand__edge">Edge</b></span>
+        </a>
+        <p class="footer__cta">Booked remodels, <em>not impressions.</em></p>
+      </div>
+      <div class="footer__col">
+        <h5>Pages</h5>
+        <a href="Home.html">Home</a>
+        <a href="Services.html">Services</a>
+        <a href="About.html">About</a>
+        <a href="Contact.html">Contact</a>
+      </div>
+      <div class="footer__col">
+        <h5>Verticals</h5>
+        <a href="Services.html">Kitchen &amp; Bath</a>
+        <a href="Services.html">Roofing</a>
+        <a href="Services.html">Windows &amp; Doors</a>
+        <a href="Services.html">Decks &amp; Outdoor</a>
+      </div>
+      <div class="footer__col">
+        <h5>Get in touch</h5>
+        <a href="Contact.html">Book a call</a>
+        <a href="mailto:ben@apexedgeinfo.com">ben@apexedgeinfo.com</a>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span class="mono">© <span data-year>2026</span> Apex Edge Marketing</span>
+      <span class="mono">Performance paid social · United States</span>
+    </div>
+  </div>
+</footer>
+
+<!-- stat strip template cloned into each hero variation -->
+<template id="statstrip-tpl">
+  <div>
+    <div class="stat__fig">$36<span class="unit">/lead</span></div>
+    <div class="stat__label">Avg. cost per qualified lead</div>
+  </div>
+  <div>
+    <div class="stat__fig">4.7<span class="unit">× ROAS</span></div>
+    <div class="stat__label">Return on ad spend</div>
+  </div>
+  <div>
+    <div class="stat__fig">120<span class="unit">+ /mo</span></div>
+    <div class="stat__label">Qualified leads / month</div>
+  </div>
+</template>
+
+<script src="assets/site.js"></script>
+<script src="image-slot.js"></script>
+<script>
+  // populate the three stat strips from the template
+  (function () {
+    var tpl = document.getElementById('statstrip-tpl');
+    document.querySelectorAll('.statstrip').forEach(function (s) {
+      s.appendChild(tpl.content.cloneNode(true));
+    });
+    // ensure scroll-reveal items are shown even without scrolling
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  })();
+
+  // Auto-print once fonts + layout are ready
+  function triggerPrint() { window.print(); }
+  (function () {
+    var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    ready.then(function () {
+      // small buffer for image-slot custom elements + layout settle
+      setTimeout(triggerPrint, 600);
+    });
+  })();
+</script>
+</body>
+</html>
